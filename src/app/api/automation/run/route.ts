@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
   const result = await runAutomation(user.id, accountId);
   if ("error" in result) {
-    return badRequest(result.error);
+    return badRequest(result.error ?? "알 수 없는 오류");
   }
 
   return Response.json(result);
