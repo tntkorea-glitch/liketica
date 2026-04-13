@@ -1,16 +1,14 @@
 import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
 function createPrismaClient() {
-  const libsql = createClient({
+  const adapter = new PrismaLibSql({
     url: "file:prisma/dev.db",
   });
-  const adapter = new PrismaLibSql(libsql);
   return new PrismaClient({ adapter });
 }
 
