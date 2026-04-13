@@ -10,7 +10,7 @@ function createPrismaClient() {
   const libsql = createClient({
     url: "file:prisma/dev.db",
   });
-  const adapter = new PrismaLibSQL(libsql);
+  const adapter = new PrismaLibSql(libsql);
   return new PrismaClient({ adapter });
 }
 
