@@ -180,8 +180,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </svg>
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
             </button>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold">
-              M
+            <div className="relative group">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold cursor-pointer">
+                {userInitial}
+              </div>
+              <div className="absolute right-0 top-full mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                <div className="px-4 py-3 border-b border-gray-700">
+                  <p className="text-sm font-medium text-white">{userName}</p>
+                  <p className="text-xs text-gray-400 truncate">{session?.user?.email}</p>
+                </div>
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-gray-700 rounded-b-lg"
+                >
+                  로그아웃
+                </button>
+              </div>
             </div>
           </div>
         </header>
