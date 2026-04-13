@@ -1,7 +1,15 @@
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-03-25.dahlia",
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY || "sk_placeholder", {
+    apiVersion: "2026-03-25.dahlia",
+  });
+}
+
+export const stripe = new Proxy({} as Stripe, {
+  get(_, prop) {
+    return (getStripe() as never)[prop];
+  },
 });
 
 export const PLANS = {
