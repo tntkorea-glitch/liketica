@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
   const parsed = addAccountSchema.safeParse(body);
-  if (!parsed.success) return badRequest(parsed.error.errors[0].message);
+  if (!parsed.success) return badRequest(parsed.error.message);
 
   const { username, password, proxy } = parsed.data;
 
