@@ -2,32 +2,30 @@
 name: Project Status
 description: insta-app 현재 진행 상태 및 다음 작업
 type: project
-originSessionId: fce36743-05bc-4b19-ab8c-7e82b94eec7b
+originSessionId: a7eaf693-e791-4af3-85eb-09379beb99e1
 ---
-## 현재 상태 (2026-04-12)
-InstaBot Pro — Instagram 자동화 SaaS 웹앱 초기 UI 완성
+## 현재 상태 (2026-04-13)
+InstaBot Pro — Instagram 자동화 SaaS 웹앱, 백엔드 연동 완료
 
 **완료된 작업:**
-- Next.js + TypeScript + Tailwind CSS 프로젝트 셋업
-- 랜딩페이지 (Hero, 기능소개, 경쟁사 비교, 요금제, FAQ, 푸터)
-- 대시보드 레이아웃 (사이드바 + 8개 메뉴)
-- 대시보드 메인 (통계카드, 차트, 로그, 진행률)
-- 계정관리, 자동화설정, 태그관리, 댓글관리, 스케줄, 분석 페이지
-- GitHub 레포 + 자동 훅 설정
+- Next.js 16 + TypeScript + Tailwind CSS 프로젝트 셋업
+- 랜딩페이지 + 대시보드 UI 8개 페이지
+- Prisma 7 + SQLite (libsql adapter) DB 구축
+- NextAuth v5 인증 (회원가입/로그인/세션/JWT)
+- 7개 API 라우트 (dashboard, accounts, automation, tags, comments, schedule, analytics)
+- 프론트엔드-백엔드 연동 (대시보드, 계정관리, 자동화설정, 태그관리, 댓글관리)
+- GitHub 푸시 완료
 
-**경쟁사 분석 완료:**
-- 라이크스타(worldviral.cafe24.com) SNS Manager 데스크톱 프로그램
-- .NET/WPF + Selenium + ChromeDriver 기반, Windows 전용
-- 기능: 자동 팔로우/언팔/좋아요/댓글, 해시태그 타겟팅
-- 경쟁사 프로그램 폴더: snsmanager5074_09.20_250522/
+**기술 스택:**
+- Prisma 7.x: adapter 패턴 필수 (PrismaLibSql), `@/generated/prisma/client`에서 import
+- DB 파일: 프로젝트 루트의 `dev.db` (prisma/ 아님)
+- Zod v4: `error.message` 직접 사용 (v3의 `error.errors[0].message` 아님)
 
 **Why:** 경쟁사보다 현대적인 웹 기반 SaaS로 차별화
-**How to apply:** 현재 UI만 완성된 상태, 백엔드 연동 필요
+**How to apply:** 스케줄/분석 페이지 API 연동 + 실제 Instagram 자동화 엔진 구현 필요
 
 ## Next up when resuming
-1. Vercel 배포 확인 및 도메인 연결
-2. 백엔드 API 구현 (인증, 계정관리, 자동화 로직)
-3. 데이터베이스 연동 (Supabase 또는 Prisma)
-4. 실제 Instagram 자동화 기능 구현
-5. 사용자 인증 (NextAuth)
-6. 결제 시스템 연동
+1. 스케줄/분석 페이지 API 연동 마무리
+2. Vercel 배포 연결 (`vercel link`)
+3. 실제 Instagram 자동화 엔진 구현 (Puppeteer/Playwright)
+4. 결제 시스템 연동
