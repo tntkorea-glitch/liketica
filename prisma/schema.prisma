@@ -1,0 +1,205 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ==================== Auth (NextAuth) ====================
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  hashedPassword String?
+  image          String?
+  plan           String    @default("FREE") // FREE, STARTER, PRO, ENTERPRISE
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  instaAccounts InstaAccount[]
+  tagGroups     TagGroup[]
+  commentGroups CommentGroup[]
+  automationConfig AutomationConfig?
+  scheduleConfig   ScheduleConfig?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ==================== Instagram Accounts ====================
+
+model InstaAccount {
+  id           String   @id @default(cuid())
+  userId       String
+  username     String
+  password     String   // encrypted
+  followers    Int      @default(0)
+  following    Int      @default(0)
+  posts        Int      @default(0)
+  active       Boolean  @default(true)
+  status       String   @default("idle") // idle, running, paused, error
+  lastActivity DateTime?
+  proxy        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activityLogs ActivityLog[]
+  analytics    AnalyticsDaily[]
+}
+
+// ==================== Automation Config ====================
+
+model AutomationConfig {
+  id              String  @id @default(cuid())
+  userId          String  @unique
+
+  // Follow
+  followEnabled   Boolean @default(false)
+  maxFollow       Int     @default(50)
+  followDelay     Int     @default(30) // seconds
+  followRandom    Boolean @default(true)
+  followRandomMin Int     @default(20)
+  followRandomMax Int     @default(60)
+
+  // Unfollow
+  unfollowEnabled   Boolean @default(false)
+  maxUnfollow       Int     @default(40)
+  unfollowDelay     Int     @default(30)
+  excludeFriends    Boolean @default(true)
+
+  // Like
+  likeEnabled   Boolean @default(false)
+  maxLike       Int     @default(100)
+  likeDelay     Int     @default(15)
+
+  // Comment
+  commentEnabled   Boolean @default(false)
+  maxComment       Int     @default(20)
+  commentNoFollow  Boolean @default(false)
+
+  // Safety
+  detectionDelay   Int     @default(300) // seconds
+  dailyLimit       Int     @default(500)
+  autoPause        Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== Tags ====================
+
+model TagGroup {
+  id             String   @id @default(cuid())
+  userId         String
+  name           String
+  tags           String   // JSON array stored as string
+  followEnabled  Boolean  @default(true)
+  likeEnabled    Boolean  @default(true)
+  commentEnabled Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== Comments ====================
+
+model CommentGroup {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  comments  String   // JSON array stored as string
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== Schedule ====================
+
+model ScheduleConfig {
+  id       String @id @default(cuid())
+  userId   String @unique
+  schedule String // JSON: { "mon": [0,1,0,...], "tue": [...], ... }
+  tasks    String @default("[]") // JSON: [{ id, label, interval, unit }]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== Activity Log ====================
+
+model ActivityLog {
+  id             String   @id @default(cuid())
+  instaAccountId String
+  type           String   // follow, unfollow, like, comment
+  target         String   // target username or post
+  status         String   // success, failed, skipped
+  message        String?
+  createdAt      DateTime @default(now())
+
+  instaAccount InstaAccount @relation(fields: [instaAccountId], references: [id], onDelete: Cascade)
+}
+
+// ==================== Analytics ====================
+
+model AnalyticsDaily {
+  id             String   @id @default(cuid())
+  instaAccountId String
+  date           DateTime
+  followers      Int      @default(0)
+  followersGained Int     @default(0)
+  followersLost   Int     @default(0)
+  likes          Int      @default(0)
+  comments       Int      @default(0)
+  follows        Int      @default(0)
+  unfollows      Int      @default(0)
+
+  instaAccount InstaAccount @relation(fields: [instaAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([instaAccountId, date])
+}
