@@ -245,6 +245,20 @@ export default function AccountsPage() {
                       {formatLastActivity(account.lastActivity)}
                     </td>
                     <td className="px-5 py-4">
+                      {account.active && (
+                        <button
+                          onClick={() => toggleAutomation(account.id, account.status === "running" || runningIds.has(account.id))}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                            account.status === "running" || runningIds.has(account.id)
+                              ? "bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                              : "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
+                          }`}
+                        >
+                          {account.status === "running" || runningIds.has(account.id) ? "중지" : "시작"}
+                        </button>
+                      )}
+                    </td>
+                    <td className="px-5 py-4">
                       <button
                         onClick={() => toggleAccount(account.id, account.active)}
                         className={`relative w-11 h-6 rounded-full transition-colors ${
