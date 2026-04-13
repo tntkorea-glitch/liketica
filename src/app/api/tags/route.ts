@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
   const parsed = tagGroupSchema.safeParse(body);
-  if (!parsed.success) return badRequest(parsed.error.errors[0].message);
+  if (!parsed.success) return badRequest(parsed.error.message);
 
   const group = await prisma.tagGroup.create({
     data: {
