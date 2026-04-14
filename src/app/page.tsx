@@ -40,7 +40,7 @@ const bestProducts = [
     badgeColor: "bg-blue-500",
     emoji: "✨",
     tag: "자동화 구독 · Business",
-    title: "InstaBot Business",
+    title: "Liketica Business",
     desc: "10계정 · API · 전담 매니저",
     price: "99,000",
     original: "149,000",
