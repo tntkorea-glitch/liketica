@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fff7ee;
-  --foreground: #2a0f2d;
+  --background: #ffffff;
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -38,48 +38,5 @@ html {
   animation: fade-in-up 0.6s ease-out forwards;
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.insta-gradient {
-  background: linear-gradient(
-    90deg,
-    #feda75 0%,
-    #fa7e1e 25%,
-    #d62976 50%,
-    #962fbf 75%,
-    #4f5bd5 100%
-  );
-}
-
-.insta-gradient-text {
-  background: linear-gradient(
-    90deg,
-    #fa7e1e 0%,
-    #d62976 50%,
-    #962fbf 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-.insta-gradient-animated {
-  background: linear-gradient(
-    90deg,
-    #feda75,
-    #fa7e1e,
-    #d62976,
-    #962fbf,
-    #4f5bd5,
-    #962fbf,
-    #d62976,
-    #fa7e1e,
-    #feda75
-  );
-  background-size: 300% 100%;
-  animation: gradient-shift 8s ease infinite;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
