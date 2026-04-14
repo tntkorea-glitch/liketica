@@ -129,7 +129,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">대시보드</h1>
-          <p className="text-sm text-gray-400 mt-1">InstaBot Pro 자동화 현황을 한눈에 확인하세요</p>
+          <p className="text-sm text-gray-400 mt-1">Liketica 자동화 현황을 한눈에 확인하세요</p>
         </div>
         <div className="flex items-center gap-2">
           {["오늘", "7일", "30일"].map((p) => (
