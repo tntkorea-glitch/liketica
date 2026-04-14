@@ -49,7 +49,7 @@ export default function SkinIndex() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-10">
           <p className="text-xs uppercase tracking-widest text-slate-500 mb-2">Skin Comparison</p>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight">InstaBot Pro — 5가지 스킨 후보</h1>
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight">Liketica — 5가지 스킨 후보</h1>
           <p className="text-slate-600 mt-2">각 카드를 클릭해서 풀페이지로 확인하세요. 구조가 완전히 다른 5종입니다.</p>
           <Link href="/" className="inline-block mt-4 text-sm text-pink-600 hover:underline">← 현재 적용된 워엄 그라데이션 스킨(원본) 보기</Link>
         </div>
