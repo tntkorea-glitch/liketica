@@ -40,14 +40,14 @@ export default function Footer() {
           <div>
             <p className="font-black text-slate-900 text-sm mb-3">결제 / 무통장 입금</p>
             <p className="mb-1">국민은행 000-00-0000-000</p>
-            <p className="mb-3">예금주: (주)인스타봇프로</p>
+            <p className="mb-3">예금주: (주)라이케티카</p>
             <p className="text-[11px] text-slate-500">* 토스 / 카카오페이 / 네이버페이 / 카드 결제 가능</p>
           </div>
 
           {/* 회사정보 */}
           <div>
             <p className="font-black text-slate-900 text-sm mb-3">회사정보</p>
-            <p>상호: (주)인스타봇프로</p>
+            <p>상호: (주)라이케티카</p>
             <p>대표: 홍길동</p>
             <p>사업자등록: 000-00-00000</p>
             <p>통신판매업: 2026-서울강남-00000</p>
