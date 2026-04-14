@@ -14,7 +14,7 @@ export default function Footer() {
             <p>주말·공휴일 휴무</p>
             <div className="flex gap-2 mt-3">
               <a
-                href="https://pf.kakao.com/_instabotpro"
+                href="https://pf.kakao.com/_liketica"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 px-3 py-1.5 bg-yellow-300 text-yellow-900 rounded font-bold text-xs hover:bg-yellow-400 transition"
