@@ -126,7 +126,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <div>
             <h1 className="text-lg font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              InstaBot Pro
+              Liketica
             </h1>
             <p className="text-[10px] text-gray-500 -mt-0.5">Instagram Automation</p>
           </div>
