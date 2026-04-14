@@ -40,7 +40,7 @@ const products = [
     badgeColor: "bg-blue-500",
     emoji: "✨",
     tag: "인스타그램 · 자동화",
-    title: "InstaBot Pro 월 구독 (Pro)",
+    title: "Liketica 월 구독 (Pro)",
     price: "49,000",
     original: "79,000",
     rating: "5.0",
@@ -251,7 +251,7 @@ export default function ShopSkin() {
             </div>
           </div>
           <div className="border-t border-slate-300 pt-4 flex flex-col sm:flex-row justify-between gap-2">
-            <p>&copy; 2026 InstaBot Pro. All rights reserved.</p>
+            <p>&copy; 2026 Liketica. All rights reserved.</p>
             <p>Skin 05 — Korean Shop Style</p>
           </div>
         </div>
