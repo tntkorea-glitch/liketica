@@ -95,7 +95,7 @@ export default function ShopSkin() {
         <div className="max-w-6xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center text-white font-black">B</div>
-            <span className="text-xl font-black tracking-tight">인스타봇 프로</span>
+            <span className="text-xl font-black tracking-tight">라이케티카</span>
           </Link>
           {/* Search */}
           <div className="hidden md:flex flex-1 max-w-xl mx-4">
