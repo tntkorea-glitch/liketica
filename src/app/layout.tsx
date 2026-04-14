@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import AuthProvider from "@/lib/auth-provider";
 import "./globals.css";
 
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full antialiased">
       <head>
+        <Script src="/inapp-guard.js" strategy="beforeInteractive" />
         <link
           rel="stylesheet"
           as="style"
