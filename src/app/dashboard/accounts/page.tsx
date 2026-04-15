@@ -107,6 +107,7 @@ export default function AccountsPage() {
         body: JSON.stringify({
           username: newUsername.replace(/^@/, ""),
           password: newPassword,
+          proxyId: newProxyId || undefined,
         }),
       });
       const data = await res.json();
@@ -117,12 +118,57 @@ export default function AccountsPage() {
       setAccounts((prev) => [data, ...prev]);
       setNewUsername("");
       setNewPassword("");
+      setNewProxyId("");
       setShowModal(false);
     } catch {
       setError("계정 추가에 실패했습니다");
     } finally {
       setSaving(false);
     }
+  };
+
+  const submitTwoFA = async () => {
+    if (!twoFAAccount || !twoFACode) return;
+    setTwoFASaving(true);
+    setTwoFAError("");
+    try {
+      const res = await fetch("/api/accounts/verify-2fa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountId: twoFAAccount.id, code: twoFACode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setTwoFAError(data.error || "검증 실패");
+        return;
+      }
+      setTwoFAAccount(null);
+      setTwoFACode("");
+      await fetchAccounts();
+    } catch {
+      setTwoFAError("요청 실패");
+    } finally {
+      setTwoFASaving(false);
+    }
+  };
+
+  const changeProxy = async (accountId: string, proxyId: string) => {
+    await fetch("/api/accounts", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: accountId, proxyId: proxyId || null }),
+    });
+    setAccounts((prev) =>
+      prev.map((a) =>
+        a.id === accountId
+          ? {
+              ...a,
+              proxyId: proxyId || null,
+              proxyConfig: proxies.find((p) => p.id === proxyId) || null,
+            }
+          : a
+      )
+    );
   };
 
   const toggleAutomation = async (accountId: string, isRunning: boolean) => {
