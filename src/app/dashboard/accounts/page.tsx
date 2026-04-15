@@ -436,9 +436,36 @@ export default function AccountsPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                  프록시 (선택)
+                </label>
+                <select
+                  value={newProxyId}
+                  onChange={(e) => setNewProxyId(e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                >
+                  <option value="">프록시 사용 안 함</option>
+                  {proxies
+                    .filter((p) => p.active)
+                    .map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.label} ({p.host}:{p.port})
+                      </option>
+                    ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  프록시는{" "}
+                  <a href="/dashboard/settings" className="text-indigo-400 hover:underline">
+                    설정
+                  </a>
+                  에서 추가할 수 있습니다
+                </p>
+              </div>
+
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
                 <p className="text-xs text-yellow-400">
-                  계정 정보는 암호화되어 안전하게 저장됩니다. 2단계 인증이 설정된 경우 추가 인증이 필요할 수 있습니다.
+                  계정 정보는 암호화되어 안전하게 저장됩니다. 2단계 인증이 설정된 경우 자동화 시작 시 추가 인증 코드가 요청됩니다.
                 </p>
               </div>
             </div>
