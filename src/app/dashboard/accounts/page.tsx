@@ -42,23 +42,30 @@ const statusLabels: Record<string, string> = {
 
 export default function AccountsPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [proxies, setProxies] = useState<Proxy[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [newProxyId, setNewProxyId] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [runningIds, setRunningIds] = useState<Set<string>>(new Set());
+  const [twoFAAccount, setTwoFAAccount] = useState<Account | null>(null);
+  const [twoFACode, setTwoFACode] = useState("");
+  const [twoFASaving, setTwoFASaving] = useState(false);
+  const [twoFAError, setTwoFAError] = useState("");
 
   const fetchAccounts = useCallback(async () => {
     try {
-      const res = await fetch("/api/accounts");
-      if (res.ok) {
-        const data = await res.json();
-        setAccounts(data);
-      }
+      const [aRes, pRes] = await Promise.all([
+        fetch("/api/accounts"),
+        fetch("/api/proxies"),
+      ]);
+      if (aRes.ok) setAccounts(await aRes.json());
+      if (pRes.ok) setProxies(await pRes.json());
     } catch (err) {
-      console.error("Failed to fetch accounts:", err);
+      console.error("Failed to fetch:", err);
     } finally {
       setLoading(false);
     }
