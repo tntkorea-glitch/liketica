@@ -289,7 +289,12 @@ export default function AccountsPage() {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-white">@{account.username}</p>
-                          <p className="text-xs text-gray-500">{statusLabels[account.status] || account.status}</p>
+                          <p className="text-xs text-gray-500">
+                            {statusLabels[account.status] || account.status}
+                            {account.proxyConfig && (
+                              <span className="ml-2 text-indigo-400">· {account.proxyConfig.label}</span>
+                            )}
+                          </p>
                         </div>
                       </div>
                     </td>
