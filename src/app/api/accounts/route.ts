@@ -11,6 +11,11 @@ export async function GET() {
   const accounts = await prisma.instaAccount.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
+    include: {
+      proxyConfig: {
+        select: { id: true, label: true, host: true, port: true, protocol: true },
+      },
+    },
   });
 
   return Response.json(accounts);
@@ -20,6 +25,7 @@ const addAccountSchema = z.object({
   username: z.string().min(1, "사용자명을 입력하세요"),
   password: z.string().min(1, "비밀번호를 입력하세요"),
   proxy: z.string().optional(),
+  proxyId: z.string().optional().nullable(),
 });
 
 // POST /api/accounts - 계정 추가
@@ -31,13 +37,17 @@ export async function POST(request: NextRequest) {
   const parsed = addAccountSchema.safeParse(body);
   if (!parsed.success) return badRequest(parsed.error.message);
 
-  const { username, password, proxy } = parsed.data;
+  const { username, password, proxy, proxyId } = parsed.data;
 
-  // 중복 체크
   const existing = await prisma.instaAccount.findFirst({
     where: { userId: user.id, username },
   });
   if (existing) return badRequest("이미 등록된 계정입니다");
+
+  if (proxyId) {
+    const p = await prisma.proxy.findFirst({ where: { id: proxyId, userId: user.id } });
+    if (!p) return badRequest("선택한 프록시를 찾을 수 없습니다");
+  }
 
   const account = await prisma.instaAccount.create({
     data: {
@@ -45,10 +55,39 @@ export async function POST(request: NextRequest) {
       username,
       password, // TODO: encrypt in production
       proxy: proxy || null,
+      proxyId: proxyId || null,
     },
   });
 
   return Response.json(account, { status: 201 });
+}
+
+const updateAccountSchema = z.object({
+  id: z.string(),
+  active: z.boolean().optional(),
+  proxyId: z.string().optional().nullable(),
+});
+
+// PATCH /api/accounts - 계정 상태/프록시 업데이트
+export async function PATCH(request: NextRequest) {
+  const user = await getAuthUser();
+  if (!user) return unauthorized();
+
+  const body = await request.json();
+  const parsed = updateAccountSchema.safeParse(body);
+  if (!parsed.success) return badRequest(parsed.error.message);
+
+  const { id, ...rest } = parsed.data;
+  const data: Record<string, unknown> = {};
+  if (rest.active !== undefined) data.active = rest.active;
+  if (rest.proxyId !== undefined) data.proxyId = rest.proxyId;
+
+  const account = await prisma.instaAccount.updateMany({
+    where: { id, userId: user.id },
+    data,
+  });
+
+  return Response.json(account);
 }
 
 // DELETE /api/accounts?id=xxx - 계정 삭제
@@ -64,20 +103,4 @@ export async function DELETE(request: NextRequest) {
   });
 
   return Response.json({ success: true });
-}
-
-// PATCH /api/accounts - 계정 상태 토글
-export async function PATCH(request: NextRequest) {
-  const user = await getAuthUser();
-  if (!user) return unauthorized();
-
-  const body = await request.json();
-  const { id, active } = body;
-
-  const account = await prisma.instaAccount.updateMany({
-    where: { id, userId: user.id },
-    data: { active },
-  });
-
-  return Response.json(account);
 }
