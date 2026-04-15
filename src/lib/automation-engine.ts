@@ -148,8 +148,24 @@ export async function runAutomation(userId: string, accountId: string) {
   return { success: true, message: "자동화가 시작되었습니다" };
 }
 
+interface RunAccount {
+  id: string;
+  userId: string;
+  username: string;
+  password: string;
+  proxy: string | null;
+  proxyConfig: {
+    protocol: string;
+    host: string;
+    port: number;
+    username: string | null;
+    password: string | null;
+    active: boolean;
+  } | null;
+}
+
 async function runLoop(
-  account: { id: string; username: string; password: string; proxy: string | null },
+  account: RunAccount,
   config: {
     followEnabled: boolean; maxFollow: number; followDelay: number;
     unfollowEnabled: boolean; maxUnfollow: number; unfollowDelay: number;
