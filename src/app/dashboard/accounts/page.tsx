@@ -2,6 +2,14 @@
 
 import { useState, useEffect, useCallback } from "react";
 
+interface ProxyRef {
+  id: string;
+  label: string;
+  host: string;
+  port: number;
+  protocol: string;
+}
+
 interface Account {
   id: string;
   username: string;
@@ -10,12 +18,25 @@ interface Account {
   active: boolean;
   lastActivity: string | null;
   status: string;
+  proxyId: string | null;
+  proxyConfig: ProxyRef | null;
+  twoFactorEnabled: boolean;
+}
+
+interface Proxy {
+  id: string;
+  label: string;
+  host: string;
+  port: number;
+  protocol: string;
+  active: boolean;
 }
 
 const statusLabels: Record<string, string> = {
   idle: "대기 중",
   running: "자동화 실행 중",
   paused: "일시정지",
+  pending_2fa: "2FA 코드 입력 필요",
   error: "오류",
 };
 
