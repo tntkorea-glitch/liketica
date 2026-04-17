@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       host: parsed.data.host,
       port: parsed.data.port,
       username: parsed.data.username || null,
-      password: parsed.data.password || null,
+      password: parsed.data.password ? encrypt(parsed.data.password) : null,
       active: parsed.data.active ?? true,
     },
   });
