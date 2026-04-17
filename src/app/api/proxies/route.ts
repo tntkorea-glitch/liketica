@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getAuthUser, unauthorized, badRequest } from "@/lib/api-utils";
+import { encrypt } from "@/lib/crypto";
 
 export async function GET() {
   const user = await getAuthUser();
