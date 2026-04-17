@@ -140,3 +140,91 @@ export async function notifyError(userId: string, accountUsername: string, error
     `계정 @${accountUsername}에서 자동화 실행 중 오류가 발생했습니다.\n\n${error}`
   );
 }
+
+interface AccountDailyLine {
+  username: string;
+  follows: number;
+  unfollows: number;
+  likes: number;
+  comments: number;
+  errors: number;
+}
+
+function formatDailyReport(dateLabel: string, lines: AccountDailyLine[]) {
+  const totals = lines.reduce(
+    (acc, l) => {
+      acc.follows += l.follows;
+      acc.unfollows += l.unfollows;
+      acc.likes += l.likes;
+      acc.comments += l.comments;
+      acc.errors += l.errors;
+      return acc;
+    },
+    { follows: 0, unfollows: 0, likes: 0, comments: 0, errors: 0 }
+  );
+
+  const text = [
+    `${dateLabel} 자동화 성과`,
+    "",
+    `총 팔로우: ${totals.follows}`,
+    `총 언팔로우: ${totals.unfollows}`,
+    `총 좋아요: ${totals.likes}`,
+    `총 댓글: ${totals.comments}`,
+    `총 오류: ${totals.errors}`,
+    "",
+    "계정별:",
+    ...lines.map(
+      (l) =>
+        `  @${l.username} — follow ${l.follows} / unfollow ${l.unfollows} / like ${l.likes} / comment ${l.comments} / error ${l.errors}`
+    ),
+  ].join("\n");
+
+  return { text, totals };
+}
+
+export async function sendDailyReport(userId: string, rangeStart: Date, rangeEnd: Date) {
+  const accounts = await prisma.instaAccount.findMany({
+    where: { userId },
+    select: { id: true, username: true },
+  });
+  if (accounts.length === 0) return { ok: false as const, error: "no accounts" };
+
+  const accountIds = accounts.map((a) => a.id);
+
+  const analytics = await prisma.analyticsDaily.findMany({
+    where: { instaAccountId: { in: accountIds }, date: { gte: rangeStart, lt: rangeEnd } },
+  });
+
+  const errorCounts = await prisma.activityLog.groupBy({
+    by: ["instaAccountId"],
+    where: {
+      instaAccountId: { in: accountIds },
+      status: "failed",
+      createdAt: { gte: rangeStart, lt: rangeEnd },
+    },
+    _count: { _all: true },
+  });
+  const errorsByAccount = new Map(errorCounts.map((e) => [e.instaAccountId, e._count._all]));
+
+  const lines: AccountDailyLine[] = accounts.map((a) => {
+    const rows = analytics.filter((r) => r.instaAccountId === a.id);
+    const sum = rows.reduce(
+      (acc, r) => ({
+        follows: acc.follows + r.follows,
+        unfollows: acc.unfollows + r.unfollows,
+        likes: acc.likes + r.likes,
+        comments: acc.comments + r.comments,
+      }),
+      { follows: 0, unfollows: 0, likes: 0, comments: 0 }
+    );
+    return {
+      username: a.username,
+      ...sum,
+      errors: errorsByAccount.get(a.id) ?? 0,
+    };
+  });
+
+  const dateLabel = rangeStart.toISOString().slice(0, 10);
+  const { text } = formatDailyReport(dateLabel, lines);
+  return notifyUser(userId, "daily", `일일 리포트 (${dateLabel})`, text);
+}
