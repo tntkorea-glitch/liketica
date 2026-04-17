@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     data: {
       userId: user.id,
       username,
-      password, // TODO: encrypt in production
+      password: encrypt(password),
       proxy: proxy || null,
       proxyId: proxyId || null,
     },
