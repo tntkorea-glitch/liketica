@@ -1,6 +1,6 @@
 ---
 name: Design System
-description: insta-app 랜딩/공통 UI 디자인 시스템 (Instagram warm gradient 테마)
+description: liketica 랜딩/공통 UI 디자인 시스템 (Instagram warm gradient 테마)
 type: project
 originSessionId: f15430ab-ed98-4c93-85e1-a15daa301f94
 ---
