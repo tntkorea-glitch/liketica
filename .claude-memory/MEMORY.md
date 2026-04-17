@@ -1,4 +1,4 @@
 - [User Profile](user_profile.md) — 사용자 기본 프로필 및 작업 환경
-- [Project Init](project_init.md) — insta-app 프로젝트 생성 정보
+- [Project Init](project_init.md) — liketica 프로젝트 생성 정보
 - [Project Status](project_status.md) — 현재 진행 상태 및 다음 작업
 - [Design System](design_system.md) — Instagram warm gradient 스킨 (토큰 + 유틸 클래스)
