@@ -4,6 +4,7 @@ import { TwoFactorRequiredError } from "./instagram";
 import type { InstaCredentials, ActionResult } from "./instagram";
 import type { IgApiClient } from "instagram-private-api";
 import { buildProxyUrl } from "./proxy-utils";
+import { decrypt } from "./crypto";
 import { notifyError } from "./notifications";
 
 // In-memory running state (per-process)
